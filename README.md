@@ -1,9 +1,11 @@
 # pubsub.js
-A simple publish/subscribe server &amp; client written in javascript.
+A lightweight publish/subscribe server &amp; client written in javascript.
 
 The publish/subscribe model is perfect for making your web application appear real-time. Imagine several people all looking at the same page, when someone makes a change to the page it's instantly reflected to all other viewers of that page. This is `pubsub.js`!  
+
+A `Channel` is a group of subscribers all listening for publish, join, & leave events. Channels are created when needed and are destroyed when there are no subscribers.  
   
-A `channel` is a group of subscribers all listening for publish, join, & leave events. Channels are created when needed and are destroyed when there are no subscribers.  
+A `Client` is a connection to the server from a web application that can be subscribed to any number of Channels.  
   
 `pubsub.js` is built with safety in mind. All data sent to the server is validated before it creates channels, subscribes clients, or publishes to a channel.  
 
@@ -37,7 +39,7 @@ channel.publish('Hello World!');
 channel.unsubscribe();
 ```
 
-*(see pubsub.html for a chat demo)*
+*(see examples/chat.html for a chat demo)*
 
 ### Configuration (config.js)
 
@@ -57,9 +59,26 @@ channel.unsubscribe();
    * If this server should notify clients when other clients have joined or left
    * a channel. The client's token it used to subscribe is sent along with these
    * notifications so the client can identify them. If this is set to false
-   * then tokens are ignored altogether in the system. TODO
+   * then tokens are ignored altogether in the system.
    */
   sendJoinLeaveEvents: true,
+  
+  /**
+   * The maximum number of channels that can be created.
+   */
+  maxChannels: -1,
+  
+  /**
+   * The maximum number of clients that may connect.
+   */
+  maxClients: -1,
+  
+  /**
+   * If a client has sent an invalid channel ID, join token, or publish data
+   * this determines whether the client is marked untrused and is no longer
+   * sent any messages.
+   */
+  ignoreInvalidClients: true,
   
   /**
    * The number of previous publishes to keep and send to a client when they join.
